@@ -4,6 +4,7 @@ import spacy
 from pprint import pprint
 import numpy as np
 import requests
+from sentence_transformers import SentenceTransformer, util
 
 nltk.download('wordnet')
 
@@ -13,7 +14,10 @@ nlp = spacy.load("en_core_web_sm")
 # Load in Questions/Answers
 QaA = []
 
-with open('QuestionsAndAnswers.txt', mode='r') as file:
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+
+with open('QuestionsAndAnswers.txt', mode='r',encoding="utf8") as file:
     for line in file:
         q, a = line.strip().split(':/:')
 
@@ -102,6 +106,32 @@ def link_entities(entities):
             linked_entities.append((entity, None, None))
     return linked_entities
 
+
+def link_entities_with_embeddings(entities, doc):
+    linked_entities = []
+    for entity in entities:
+        candidates = generate_candidates_api(entity)
+        if candidates:
+            best_candidate = None
+            max_similarity = -1
+
+            # Find the sentence containing the entity
+            entity_sentence = next(sent for sent in doc.sents if entity in sent.text)
+            entity_embedding = model.encode(entity_sentence.text, convert_to_tensor=True)
+
+            for candidate in candidates:
+                entity_info = get_entity_info(candidate)
+                candidate_embedding = model.encode(entity_info['description'], convert_to_tensor=True)
+                similarity = util.pytorch_cos_sim(entity_embedding, candidate_embedding).item()
+                if similarity > max_similarity:
+                    best_candidate = entity_info
+                    max_similarity = similarity
+            linked_entities.append((entity, best_candidate['label'], best_candidate['url']))
+        else:
+            linked_entities.append((entity, None, None))
+    return linked_entities
+
+
 NER = []
 
 for qa in QaA:
@@ -111,6 +141,9 @@ for qa in QaA:
 
     q_entities = [entity.text for entity in q_doc.ents if entity.label_ not in dont_include_labels]
     a_entities = [entity.text for entity in a_doc.ents if entity.label_ not in dont_include_labels]
+
+    #linked_q_entities = link_entities_with_embeddings(q_entities, q_doc)
+    #linked_a_entities = link_entities_with_embeddings(a_entities, a_doc)
 
     linked_q_entities = link_entities(q_entities)
     linked_a_entities = link_entities(a_entities)
