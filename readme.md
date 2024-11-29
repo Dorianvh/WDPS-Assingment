@@ -1,4 +1,4 @@
-**How to use**
+#How to use
 
 The main.py script has two command-line arguments:
 
@@ -8,5 +8,5 @@ The main.py script has two command-line arguments:
 * -outfile or -of:
     specify the location and name of the output file that will be generated with the answers
 
-# example usage:
+**example usage:**
 python code/main.py -if code/example_input.txt -of code/outputfile.txt
