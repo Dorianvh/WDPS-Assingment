@@ -98,6 +98,3 @@ question-1\tA"Paris"
    - Links extracted entities to Wikidata pages using the Wikidata API.
 3. The results are saved to the specified output file.
 
-## License
-
-This project is licensed under the MIT License.
