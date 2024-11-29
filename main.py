@@ -1,7 +1,71 @@
 import spacy
 import argparse
 import subprocess
+import requests
 from llama_cpp import Llama
+
+def link_entities(entities):
+    linked_entities = []
+    for entity in entities:
+        candidates = generate_candidates_api(entity)
+        if candidates:
+            best_candidate = None
+            max_sitelinks = -1
+            for candidate in candidates:
+                entity_info = get_entity_info(candidate)
+                if entity_info['sitelinks'] > max_sitelinks:
+                    best_candidate = entity_info
+                    max_sitelinks = entity_info['sitelinks']
+            linked_entities.append((entity, best_candidate['label'], best_candidate['url']))
+        else:
+            linked_entities.append((entity, None, None))
+    return linked_entities
+
+def generate_candidates_api(mention, language="en", limit=10):
+    url = "https://www.wikidata.org/w/api.php"
+
+    params = {
+        "action": "wbsearchentities",
+        "search": mention,
+        "language": language,
+        "format": "json",
+        "limit": limit,
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    candidates = []
+
+    for entity in data.get("search", []):
+        candidates.append(entity["id"])
+    return candidates
+
+def get_entity_info(id, languages='en'):
+    url = "https://www.wikidata.org/w/api.php"
+
+    params = {
+        "action": "wbgetentities",
+        "ids": id,
+        "languages": languages,
+        "format": "json",
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    label = data['entities'][id]['labels'].get('en', {}).get('value', 'No label available')
+    description = data['entities'][id]['descriptions'].get('en', {}).get('value', 'No description available')
+    claims = len(data['entities'][id]['claims'].keys())
+    sitelinks = len(data['entities'][id]['sitelinks'].keys())
+
+    url = ''
+
+    if data['entities'][id]['sitelinks'].get('enwiki'):
+        base_url = 'https://en.wikipedia.org/wiki/'
+        url = base_url + data['entities'][id]['sitelinks']['enwiki']['title'].replace(' ', '_')
+
+    return {'label': label, 'description': description, 'claims': claims, 'sitelinks': sitelinks, 'url': url}
 
 def ensure_model_installed(model_name="en_core_web_sm"):
     """
@@ -19,7 +83,7 @@ def ensure_model_installed(model_name="en_core_web_sm"):
         # Install the model using subprocess
         subprocess.check_call(["python", "-m", "spacy", "download", model_name])
         print(f"Model '{model_name}' installed successfully.")
-        
+          
 def recognize_entities(text):
     """
     Perform Named Entity Recognition (NER) on the given text using spaCy.
@@ -30,12 +94,12 @@ def recognize_entities(text):
     Returns:
         list: A list of recognized entities with their labels.
     """
-    # Load the pre-trained spaCy model
+    
     nlp = spacy.load("en_core_web_sm")
-    # Process the text
     doc = nlp(text)
-    # Extract entities
-    entities = [ent.text for ent in doc.ents]
+    filter = ['DATE', 'TIME', 'PERCENT', 'MONEY', 'QUANTITY', 'ORDINAL', 'CARDINAL']
+    entities = [ent.text for ent in doc.ents if ent.label_ not in filter]
+    
     return entities
 
 def read_input(path):
@@ -67,7 +131,7 @@ def append_outfile(path:str,
         outfile.write(f'{q_id}\tR"{raw_response}"\n')
         outfile.write(f'{q_id}\tA"{answer}"\n')
         outfile.write(f'{q_id}\tC"{correctness}"\n')
-        for entity, url in entities:
+        for entity, _, url in entities:
             outfile.write(f'{q_id}\tE"{entity}"\t"{url}"\n')
     
 def ask_question(question, model_path = "models/llama-2-7b.Q4_K_M.gguf"):
@@ -83,27 +147,30 @@ def ask_question(question, model_path = "models/llama-2-7b.Q4_K_M.gguf"):
     return output['choices'][0]['text']        
             
 def main():
+    
     parser = argparse.ArgumentParser(
                         prog='ProgramName',
-                        description='What the program does',
                         epilog='Text at the bottom of help')
 
-    parser.add_argument('-filename','-f')
+    parser.add_argument('-infile','-if')
+    parser.add_argument('-outfile','-of')
+    args = parser.parse_args()
     
     ensure_model_installed()
+    questions = read_input(args.infile)
     
-    args = parser.parse_args()
-    questions = read_input(args.filename)
+    with open(args.outfile, 'w') as f:
+        pass
+    
     for q_id, q_text in questions.items():
         
         answer = ask_question(question=q_text)
         entities = recognize_entities(answer)
-        print(entities)
-        
-        append_outfile(path='code/output.txt',
+        links = link_entities(entities=entities)
+        append_outfile(path=args.outfile,
                        q_id=q_id,
                        raw_response=answer,
-                       entities=[(entity, 'www.blabla.com') for entity in entities])
+                       entities=links)
         
 if __name__ == '__main__':
     main()
