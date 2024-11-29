@@ -151,26 +151,34 @@ def main():
     parser = argparse.ArgumentParser(
                         prog='ProgramName',
                         epilog='Text at the bottom of help')
-
     parser.add_argument('-infile','-if')
     parser.add_argument('-outfile','-of')
     args = parser.parse_args()
     
+    #check if the required model is installed and if not, download it
     ensure_model_installed()
     questions = read_input(args.infile)
     
+    #create or wipe the output file
     with open(args.outfile, 'w') as f:
         pass
     
+    #process the questions
     for q_id, q_text in questions.items():
         
+        #fetch llm output
         answer = ask_question(question=q_text)
+        
+        #extract entities and disambiguate
         entities = recognize_entities(answer)
         links = link_entities(entities=entities)
+        
+        #append results to outfile
         append_outfile(path=args.outfile,
                        q_id=q_id,
                        raw_response=answer,
                        entities=links)
         
 if __name__ == '__main__':
+    
     main()
