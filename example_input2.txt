@@ -1,0 +1,66 @@
+question-001	What is the country with the most people in the world? Answer
+question-002	Who is the director of Pulp Fiction? Answer:
+question-003	Is it true that China is the country with the most people in the world? Answer
+question-004	Is Managua the capital of Nicaragua?
+question-005	The largest company in the world by revenue is Apple
+question-006	What is the tallest mountain on Earth? Answer
+question-007	Who painted the Mona Lisa? Answer:
+question-008	Does the Amazon rainforest produce 20% of the Earth's oxygen? Answer
+question-009	Is the Great Wall of China visible from space? Answer
+question-010	The Eiffel Tower is located in Paris, France. Answer
+question-011	What is the capital of Australia? Answer
+question-012	Who invented the telephone? Answer:
+question-013	Is Pluto still considered a planet in our solar system? Answer
+question-014	Does the Sahara Desert cover most of Africa? Answer
+question-015	What is the name of the longest river in the world? Answer
+question-016	Is it true that the monarch of England is also the monarch of Canada? Answer:
+question-017	What is the fastest animal on land? Answer
+question-018	Who wrote the play Romeo and Juliet? Answer:
+question-019	Is Mount Everest located in Nepal? Answer
+question-020	Is water made up of hydrogen and oxygen? Answer
+question-021	The Pacific Ocean is the largest ocean on Earth. Answer
+question-022	What is the chemical symbol for gold? Answer
+question-023	Who discovered the law of gravity? Answer:
+question-024	Does the moon orbit the Earth? Answer
+question-025	Is the sun a star? Answer
+question-026	What is the name of the artist who painted Starry Night? Answer
+question-027	Who was the first person to walk on the moon? Answer:
+question-028	Does the Amazon River flow through Brazil? Answer
+question-029	Is Africa the second-largest continent by area? Answer
+question-030	The Great Pyramid of Giza is one of the Seven Wonders of the Ancient World. Answer
+question-031	What is the capital city of Japan? Answer
+question-032	Who is the author of Harry Potter? Answer:
+question-033	Does the Nile River flow northward? Answer
+question-034	Is coffee originally from South America? Answer
+question-035	What is the process called by which plants make their food using sunlight? Answer
+question-036	Who is the current president of the United States? Answer:
+question-037	What is the smallest planet in our solar system? Answer
+question-038	Who painted The Persistence of Memory? Answer:
+question-039	Is the Great Barrier Reef located in Australia? Answer
+question-040	Is Mount Kilimanjaro the highest mountain in Africa? Answer
+question-041	The Statue of Liberty was a gift from France to the United States. Answer
+question-042	What is the official language of Brazil? Answer
+question-043	Who developed the theory of relativity? Answer:
+question-044	Does the Atlantic Ocean separate Europe and North America? Answer
+question-045	Is the Sahara Desert the largest hot desert in the world? Answer
+question-046	The Leaning Tower of Pisa is located in Italy. Answer
+question-047	What is the largest mammal on Earth? Answer
+question-048	Who is the creator of the theory of evolution by natural selection? Answer:
+question-049	Does the equator pass through Kenya? Answer
+question-050	Is Russia the largest country in the world by area? Answer
+question-051	What is the name of the smallest unit of life? Answer
+question-052	Is the Amazon River the second-longest river in the world? Answer:
+question-053	What is the chemical formula for water? Answer
+question-054	Who is known as the father of modern physics? Answer:
+question-055	Does the Taj Mahal represent Mughal architecture? Answer
+question-056	Is Jupiter the largest planet in the solar system? Answer
+question-057	The Colosseum is located in Rome, Italy. Answer
+question-058	What is the main ingredient in traditional sushi? Answer
+question-059	Who is the author of The Lord of the Rings? Answer:
+question-060	Does the Arctic Ocean cover the North Pole? Answer
+question-061	Is the Great Wall of China longer than 10,000 kilometers? Answer
+question-062	What is the name of the galaxy we live in? Answer
+question-063	Who discovered penicillin? Answer:
+question-064	Does the Andes mountain range run through Chile? Answer
+question-065	Is the kangaroo native to Australia? Answer
+question-066	The Dead Sea is the lowest point on Earth's surface. Answer
